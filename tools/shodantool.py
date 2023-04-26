@@ -23,7 +23,10 @@ class ShodanTool(BaseTool):
 
     def _run(self, query: str) -> list:
         shodan = Shodan(self.shodan_api_key)
-        res = shodan.search(query)
+        try:
+            res = shodan.search(query)
+        except Exception as e:
+            return f'Error: {str(e)}'
         return res['matches']
     async def _arun(self, query):
         return self._run(query)
