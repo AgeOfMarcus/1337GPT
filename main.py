@@ -11,10 +11,20 @@ from prompt import SEARCHGPT_PREFIX, SEARCHGPT_FORMAT_INSTRUCTIONS, SEARCHGPT_SU
 # tools/
 from tools import SearchTool, TalkToUser, ShellTool, ShodanTool
 
+# parse arguments
+from argparse import ArgumentParser
+parser = ArgumentParser()
+parser.add_argument('--goal', '-g', help='Goal for task manager to complete.', required=True)
+parser.add_argument('--persist', '-p', help='File to persist data to. If not set, persist will be disabled.', default=False)
+parser.add_argument('--repeat', '-r', help='Allow repeat tasks. Default False.', action='store_true', default=False)
+parser.add_argument('--model', '-m', help='Model to use for chat. Default gpt-4.', default='gpt-4')
+parser.add_argument('--temperature', '-t', help='Temperature for chat model. Default 0.', default=0)
+args = parser.parse_args()
+
 # chat model for agent
 llm = ChatOpenAI(
-    temperature=0, 
-    model_name='gpt-4'
+    temperature=args.temperature, 
+    model_name=args.model
 )
 # memory for agent
 memory = ConversationBufferMemory(
@@ -27,11 +37,11 @@ tools = [SearchTool(), ShellTool(confirm_before_exec=True), TalkToUser(), Shodan
 
 # create an instance of TaskManager
 taskman = TaskManager(
-    'Find outdated servers on the usf.edu network. Use the shodan.io api to find hosts.', # goal
+    args.goal, # goal
     convert_langchain_tools(tools), # list of dicts of tools
     OpenAI(temperature=0), # llm for taskmanager
-    persist='pentest.json', # i want to persist data
-    allow_repeat_tasks=False # so it doesn't get stuck in a loop
+    persist=args.persist, # i want to persist data
+    allow_repeat_tasks=args.repeat # so it doesn't get stuck in a loop
 )
 
 # now the agent for doing tasks
@@ -72,5 +82,4 @@ def main():
         taskman.refine(task, res) # refine process for taskmanager
 
 if __name__ == '__main__':
-    print('fork this and try it out!')
-    #main() # f it we ball
+    main() # f it we ball
