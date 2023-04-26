@@ -33,3 +33,11 @@ For now, the tools loaded are the `SearchTool`, `ShellTool`, `TalkToUser`, and t
     * example: `python main.py --goal "preform a pentest of localhost. start with an nmap scan" --persist localhost.json`
 
 By default, `1337GPT` uses **GPT-4** for best results. However if you don't have access to the API, you can use `--model gpt-3.5-turbo` instead.
+
+## Best practices
+
+These are some prompt alignment techniques that you should use in your goal for the best results.
+
+* **Give it somewhere to start.** To avoid unpredicted workflows, tell the Assistant how it should begin, e.g. *"start by running an nmap scan"*. 
+* **Tell it what tools you have installed.** While capable of installing tools itself, the Assistant generally will not do so without additional prompting. By telling it more details about your host system, `1337GPT `will have a better understanding of current limitations.
+* **If it's ignoring a tool, tell it to use it by name.** I found that often times, the Assistant would choose to use the `TalkToUser` tool to ask me a question, when it could have easily found an answer using the `GoogleSearch` tool. While I tried to fix this in the tool descriptions, if something like this happens, don't be afraid to tell it the name of the tool it should use for something.
