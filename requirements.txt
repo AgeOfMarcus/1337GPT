@@ -1,0 +1,4 @@
+langchain
+googlesearch.py
+python-dotenv
+requests
