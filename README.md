@@ -3,6 +3,10 @@ My attempt at making a GPT agent for pentesting
 
 This repository contains a copy of my [ai task manager](https://replit.com/@MarcusWeinberger/ai-task-manager) that has been modified to preform penetration tests. 
 
+### Media of 1337GPT in use
+
+![media/talking_to_user_and_retrying_nmap_scan.png](media/talking_to_user_and_retrying_nmap_scan.png)
+
 # Cool features
 
 * edit tasks before running, or skip entirely
