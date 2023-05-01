@@ -5,3 +5,6 @@
   presented to the user
 
 * demo vid on yt
+
+* in prompt or in shell tool desc, instruct assistant
+  to use commands with verbose mode on
