@@ -18,7 +18,7 @@ parser.add_argument('--goal', '-g', help='Goal for task manager to complete.', r
 parser.add_argument('--persist', '-p', help='File to persist data to. If not set, persist will be disabled.', default=False)
 parser.add_argument('--repeat', '-r', help='Allow repeat tasks. Default False.', action='store_true', default=False)
 parser.add_argument('--model', '-m', help='Model to use for chat. Default gpt-4.', default='gpt-4')
-parser.add_argument('--temperature', '-t', help='Temperature for chat model. Default 0.', default=0)
+parser.add_argument('--temperature', help='Temperature for chat model. Default 0.', default=0)
 parser.add_argument('--tools', '-t', help=f'Comma separated list of tools to use (from: {", ".join(TOOLS.keys())}) . Default: GoogleSearch,Shell,Shodan', default='GoogleSearch,Shell,Shodan')
 args = parser.parse_args()
 
