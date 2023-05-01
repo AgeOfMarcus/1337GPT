@@ -20,7 +20,7 @@ This repository contains a copy of my [ai task manager](https://replit.com/@Marc
     * Search the shodan.io API (**requires API key**)
     * Ask the User a question
 
-For now, the tools loaded are the `SearchTool`, `ShellTool`, `TalkToUser`, and the `ShodanTool`. I will add an argument to allow different tools, however until then you must edit `main.py` directly. See `tools/__init__.py` for tool names.
+You can now select which tools your agent can use with the `--tools` argument. By default, `GoogleSearch,Shell,Shodan` is set (yes, they have readable names now).
 
 # Usage
 
