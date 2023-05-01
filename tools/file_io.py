@@ -2,8 +2,8 @@ from langchain.tools import BaseTool
 import json
 import os
 
-class WriteTool(BaseTool):
-    name = 'WriteTool'
+class WriteFileTool(BaseTool):
+    name = 'WriteFileTool'
     description = (
         'Useful for writing text to files.'
         'Use this when asked to save data to a file, or write a file.'

@@ -9,7 +9,7 @@ from task_manager import TaskManager, convert_langchain_tools
 # prompt.py - recycled
 from prompt import SEARCHGPT_PREFIX, SEARCHGPT_FORMAT_INSTRUCTIONS, SEARCHGPT_SUFFIX
 # tools/
-from tools import SearchTool, TalkToUser, ShellTool, ShodanTool
+from tools import TOOLS
 
 # parse arguments
 from argparse import ArgumentParser
@@ -19,6 +19,7 @@ parser.add_argument('--persist', '-p', help='File to persist data to. If not set
 parser.add_argument('--repeat', '-r', help='Allow repeat tasks. Default False.', action='store_true', default=False)
 parser.add_argument('--model', '-m', help='Model to use for chat. Default gpt-4.', default='gpt-4')
 parser.add_argument('--temperature', '-t', help='Temperature for chat model. Default 0.', default=0)
+parser.add_argument('--tools', '-t', help=f'Comma separated list of tools to use (from: {", ".join(TOOLS.keys())}) . Default: GoogleSearch,Shell,Shodan', default='GoogleSearch,Shell,Shodan')
 args = parser.parse_args()
 
 # chat model for agent
@@ -33,7 +34,9 @@ memory = ConversationBufferMemory(
     return_messages=True
 )
 # tools i wrote for the agent, can be used with any langchain program, from ./tools/
-tools = [SearchTool(), ShellTool(confirm_before_exec=True), TalkToUser(), ShodanTool()]
+tools = []
+for tool in args.tools.split(','):
+    tools.append(TOOLS[tool]())
 
 # create an instance of TaskManager
 taskman = TaskManager(
