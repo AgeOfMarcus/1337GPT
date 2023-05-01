@@ -15,12 +15,26 @@ class ShellTool(BaseTool):
     )
     confirm_before_exec: bool = Field(default=True)
 
+    def _sh(self, cmd: str) -> dict:
+        proc = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
+        stdout, stderr = proc.communicate()
+        return {
+            'stdout': stdout.decode(),
+            'stderr': stderr.decode()
+        }
+
     def _run(self, command: str) -> str:
-        if input(f'[system] run the following command? `{command}`. y/N: ').lower().startswith('y'):
-            proc = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
-            res = proc.communicate()
-            return {'stdout': res[0].decode(), 'stderr': res[1].decode()}
-        else:
-            return 'Error: User aborted before command could execute.'
+        if self.confirm_before_exec:
+            conf = input(f'[system] run the following command? `{command}`. [y]es/[N]o/[e]dit: ').lower()
+            if conf.startswith('e'):
+                new = input('enter new command: ')
+                return self._sh(new)
+            elif conf.startswith('y'):
+                return self._sh(command)
+            else:
+                return {
+                    'stdout':'',
+                    'stderr':'User aborted the process before command was executed. Reformulate.'        
+                }
     async def _arun(self, command):
         return self._run(command)
