@@ -7,6 +7,10 @@ This repository contains a copy of my [ai task manager](https://replit.com/@Marc
 
 ![media/talking_to_user_and_retrying_nmap_scan.png](media/talking_to_user_and_retrying_nmap_scan.png)
 
+### Stargazer history
+
+[![Star History Chart](https://api.star-history.com/svg?repos=AgeOfMarcus/1337GPT&type=Date)](https://star-history.com/#AgeOfMarcus/1337GPT)
+
 # Cool features
 
 * edit tasks before running, or skip entirely
