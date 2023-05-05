@@ -8,7 +8,7 @@ class ShellTool(BaseTool):
     description = (
         'Useful for running commands on the host system.'
         'Use this for testing code, or to execute shell commands.'
-        'ONLY USE THIS WITH NON-BLOCKING COMMANDS.'
+        'ONLY USE THIS WITH NON-BLOCKING COMMANDS. Always run commands with verbose mode when applicable.'
         f'Current host info: {str(platform.uname())}'
         'Accepts a string as input which will be executed.'
         'Returns a dict containing the keys "stdout" and "stderr".'

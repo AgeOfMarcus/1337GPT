@@ -20,6 +20,8 @@ parser.add_argument('--repeat', '-r', help='Allow repeat tasks. Default False.',
 parser.add_argument('--model', '-m', help='Model to use for chat. Default gpt-4.', default='gpt-4')
 parser.add_argument('--temperature', help='Temperature for chat model. Default 0.', default=0)
 parser.add_argument('--tools', '-t', help=f'Comma separated list of tools to use (from: {", ".join(TOOLS.keys())}) . Default: GoogleSearch,Shell,Shodan', default='GoogleSearch,Shell,Shodan')
+parser.add_argument('--tool-args', help="A dictionary containing kwargs that will be passed to tools as they are initialized. Default: {'Shell': {'confirm_before_exec': True}}", type=dict, default={'Shell': {'confirm_before_exec': True}})
+parser.add_argument('--confirm-tool', help='Confirm before using tool (enables the re-think tool argument feature)', action='store_true')
 args = parser.parse_args()
 
 # chat model for agent
@@ -36,7 +38,7 @@ memory = ConversationBufferMemory(
 # tools i wrote for the agent, can be used with any langchain program, from ./tools/
 tools = []
 for tool in args.tools.split(','):
-    tools.append(TOOLS[tool]())
+    tools.append(TOOLS[tool](**args.tool_args.get(tool, {})))
 
 # create an instance of TaskManager
 taskman = TaskManager(
@@ -44,7 +46,8 @@ taskman = TaskManager(
     convert_langchain_tools(tools), # list of dicts of tools
     OpenAI(temperature=0), # llm for taskmanager
     persist=args.persist, # i want to persist data
-    allow_repeat_tasks=args.repeat # so it doesn't get stuck in a loop
+    allow_repeat_tasks=args.repeat, # so it doesn't get stuck in a loop
+    confirm_tool=args.confirm_tool
 )
 
 # now the agent for doing tasks

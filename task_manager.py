@@ -115,7 +115,7 @@ class TaskManager(object):
             }, f)
         self.output_func(f'saved stored info to: {self.persist}')
     
-    def __init__(self, goal: str, tools: list, llm: BaseLLM, output_func: callable = print, complete_func: callable = save_to_file, current_tasks: list = None, final_result: dict = None, allow_repeat_tasks: bool = True, completed_tasks: dict = None, persist: str = None):
+    def __init__(self, goal: str, tools: list, llm: BaseLLM, output_func: callable = print, complete_func: callable = save_to_file, current_tasks: list = None, final_result: dict = None, allow_repeat_tasks: bool = True, completed_tasks: dict = None, persist: str = None, confirm_tool: bool = False):
         """
         :param goal: str - final goal in natrual language
         :param tools: list - a list of tools (dicts) containing keys "name" and "description"
@@ -125,6 +125,7 @@ class TaskManager(object):
         :kwarg output_func: callable - defaults to print, for verbose outout
         :kwargs complete_func: callable - func to run when complete, accepts a goal (str) and results (dict), defaults to a func that saves to file
         :kwarg persist: str - defaults to None, but if set to a filepath, [stored_info, final_result, current_tasks] will be loaded and saved there
+        :kwarg confirm_tool: bool - require user confirmation before running tools (default: False)
         :kwarg completed_tasks: dict - defaults to None for empty, already completed tasks for when allow_repeat_tasks=False (key = task name, value = task result), overwrites loaded tasks
         :kwarg current_tasks: list - defaults to None for empty, contains a list of (strings) tasks in natural language, overwrites loaded tasks
         :kwarg final_result: dict - defaults to None for empty, contains a dict of any results for the final goal, overwrites loaded result
@@ -135,6 +136,7 @@ class TaskManager(object):
         self.output_func = output_func
         self.complete_func = complete_func
         self.allow_repeat_tasks = allow_repeat_tasks
+        self.confirm_tool = confirm_tool
         if persist: # load from file
             self.persist = persist
             self._load_persist()
