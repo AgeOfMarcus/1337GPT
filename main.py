@@ -21,7 +21,6 @@ parser.add_argument('--model', '-m', help='Model to use for chat. Default gpt-4.
 parser.add_argument('--temperature', help='Temperature for chat model. Default 0.', default=0)
 parser.add_argument('--tools', '-t', help=f'Comma separated list of tools to use (from: {", ".join(TOOLS.keys())}) . Default: GoogleSearch,Shell,Shodan', default='GoogleSearch,Shell,Shodan')
 parser.add_argument('--tool-args', help="A dictionary containing kwargs that will be passed to tools as they are initialized. Default: {'Shell': {'confirm_before_exec': True}}", type=dict, default={'Shell': {'confirm_before_exec': True}})
-parser.add_argument('--confirm-tool', help='Confirm before using tool (enables the re-think tool argument feature)', action='store_true')
 args = parser.parse_args()
 
 # chat model for agent
