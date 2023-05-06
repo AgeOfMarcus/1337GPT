@@ -4,3 +4,4 @@ python-dotenv
 requests
 googlesearch.py
 duckduckgo-search
+beautifulsoup4

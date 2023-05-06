@@ -19,7 +19,8 @@ This repository contains a copy of my [ai task manager](https://replit.com/@Marc
 * built-in tools (using [langchain](https://python.langchain.com)):
     * Read/Write/List local files
     * Scrape text from websites (using `extractor API` - **requires API key**)
-    * Search Google (using `googlesearch.py` - **no API key needed**)
+    * Read website html body with bs4
+    * Search Google and DuckDuckGo (**no API key needed**)
     * Execute shell commands (by default, requires confirmation)
     * Search the shodan.io API (**requires API key**)
     * Ask the User a question
