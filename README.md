@@ -7,7 +7,7 @@ This repository contains a copy of my [ai task manager](https://replit.com/@Marc
 
 # **New Terminal UI**
 
-![media/tui.png](media/tui.png)
+![media/tui_demo.gif](media/tui_demo.gif)
 
 To use the new terminal user interface, run the program with the `--tui` argument!
 
