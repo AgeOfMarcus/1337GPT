@@ -25,6 +25,7 @@ class TaskManager(object):
     final_goal: str
     goal_completed: bool = False
     tools: list
+    verbose: bool = True
     llm: BaseLLM
     final_result: dict = {}
     stored_info: dict = {}
@@ -121,15 +122,17 @@ class TaskManager(object):
             }, f)
         self.output_func(f'saved stored info to: {self.persist}')
     
-    def __init__(self, goal: str, tools: list, llm: BaseLLM, output_func: callable = print, complete_func: callable = save_to_file, current_tasks: list = None, final_result: dict = None, allow_repeat_tasks: bool = True, completed_tasks: dict = None, persist: str = None, confirm_tool: bool = False):
+    def __init__(self, goal: str, tools: list, llm: BaseLLM, verbose: bool = True, output_func: callable = print, complete_func: callable = save_to_file, input_func: callable = input, current_tasks: list = None, final_result: dict = None, allow_repeat_tasks: bool = True, completed_tasks: dict = None, persist: str = None, confirm_tool: bool = False):
         """
         :param goal: str - final goal in natrual language
         :param tools: list - a list of tools (dicts) containing keys "name" and "description"
         :param llm: BaseLLM - LLM instance from langchain.llms
 
+        :kwarg verbose: bool - defaults to True, if False, will not print updated info
         :kwarg allow_repeat_tasks: bool - defaults to True but you might want to disable, will not allow the bot to add tasks that have already been completed
         :kwarg output_func: callable - defaults to print, for verbose outout
-        :kwargs complete_func: callable - func to run when complete, accepts a goal (str) and results (dict), defaults to a func that saves to file
+        :kwarg input_func: callable - defaults to input, for user input
+        :kwarg complete_func: callable - func to run when complete, accepts a goal (str) and results (dict), defaults to a func that saves to file
         :kwarg persist: str - defaults to None, but if set to a filepath, [stored_info, final_result, current_tasks] will be loaded and saved there
         :kwarg confirm_tool: bool - require user confirmation before running tools (default: False)
         :kwarg completed_tasks: dict - defaults to None for empty, already completed tasks for when allow_repeat_tasks=False (key = task name, value = task result), overwrites loaded tasks
@@ -141,8 +144,10 @@ class TaskManager(object):
         self.tools = tools
         self.output_func = output_func
         self.complete_func = complete_func
+        self.input_func = input_func
         self.allow_repeat_tasks = allow_repeat_tasks
         self.confirm_tool = confirm_tool
+        self.verbose = verbose
         if persist: # load from file
             self.persist = persist
             self._load_persist()
@@ -153,13 +158,14 @@ class TaskManager(object):
             self.final_result = final_result
         if completed_tasks:
             self.completed_tasks = completed_tasks
+        
 
         if not self.current_tasks: # if no loaded tasks
             self._create_initial_tasks()
 
-    def init_agent(self, agent):
-        agent.callbacks[0].on_tool_start = self._on_tool_start
-        agent.callbacks[0].on_tool_end = self._on_tool_end
+    def init_agent(self, agent, on_tool_start: callable = None, on_tool_end: callable = None):
+        agent.callbacks[0].on_tool_start = on_tool_start or self._on_tool_start
+        agent.callbacks[0].on_tool_end = on_tool_end or self._on_tool_end
 
     def format_task_str(self, task: str, smart_combine: bool = False, include_completed_tasks: bool = False):
         """
@@ -250,7 +256,8 @@ class TaskManager(object):
         resp = self.llm(prompt)
         res = self.load_json(resp)
 
-        self.output_func('[system] ai created task list: ' + ', '.join(res['current_tasks']))
+        if self.verbose:
+            self.output_func('[system] ai created task list: ' + ', '.join(res['current_tasks']))
         self.current_tasks = res['current_tasks']
 
     def _on_tool_start(self, tool, input_str, **kwargs):
@@ -297,11 +304,13 @@ class TaskManager(object):
             self.add_tasks(current_tasks)
         if (stored_info := res.get('stored_info')):
             needs_save = True
-            self.output_func(f'[system] new info: {stored_info}')
+            if self.verbose:
+                self.output_func(f'[system] new info: {stored_info}')
             self.stored_info.update(stored_info)
         if (final_result := res.get('final_result')):
             needs_save = True
-            self.output_func(f'[system] new final result: {final_result}')
+            if self.verbose:
+                self.output_func(f'[system] new final result: {final_result}')
             self.final_result.update(final_result)
 
         if needs_save and self.persist:
@@ -309,14 +318,16 @@ class TaskManager(object):
 
     def add_tasks(self, current_tasks: list):
         if self.allow_repeat_tasks:
-            self.output_func(f'[system] new tasks: {current_tasks}')
+            if self.verbose:
+                self.output_func(f'[system] new tasks: {current_tasks}')
             self.current_tasks = current_tasks
         else:
             new_current_tasks = []
             for task in current_tasks:
                 if not task in self.completed_tasks.keys():
                     new_current_tasks.append(task)
-            self.output_func(f'[system] new tasks: {new_current_tasks} (skipped: {", ".join(t for t in new_current_tasks if not t in current_tasks)})')
+            if self.verbose:
+                self.output_func(f'[system] new tasks: {new_current_tasks} (skipped: {", ".join(t for t in new_current_tasks if not t in current_tasks)})')
             self.current_tasks = new_current_tasks
 
     def ensure_goal_complete(self):
@@ -325,7 +336,8 @@ class TaskManager(object):
         res = self.load_json(resp)
 
         if (final_result := res.get('final_result')):
-            self.output_func(f'[system] new final result: {final_result}')
+            if self.verbose:
+                self.output_func(f'[system] new final result: {final_result}')
             self.final_result.update(final_result)
         if (current_tasks := res.get('current_tasks')):
             self.add_tasks(current_tasks)

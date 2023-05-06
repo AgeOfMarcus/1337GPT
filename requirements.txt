@@ -5,3 +5,4 @@ requests
 googlesearch.py
 duckduckgo-search
 beautifulsoup4
+rich

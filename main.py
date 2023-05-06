@@ -7,7 +7,7 @@ from langchain.llms import OpenAI
 # task_manager.py
 from task_manager import TaskManager, convert_langchain_tools, EmptyCallbackHandler
 # prompt.py - recycled
-from prompt import SEARCHGPT_PREFIX, SEARCHGPT_FORMAT_INSTRUCTIONS, SEARCHGPT_SUFFIX
+from prompt import AGENT_PREFIX, AGENT_FORMAT_INSTRUCTIONS, AGENT_SUFFIX
 # tools/
 from tools import TOOLS
 
@@ -15,12 +15,15 @@ from tools import TOOLS
 from argparse import ArgumentParser
 parser = ArgumentParser()
 parser.add_argument('--goal', '-g', help='Goal for task manager to complete.', required=True)
+parser.add_argument('--tui', help='Use the Terminal User Interface. Default False.', action='store_true', default=False)
 parser.add_argument('--persist', '-p', help='File to persist data to. If not set, persist will be disabled.', default=False)
 parser.add_argument('--repeat', '-r', help='Allow repeat tasks. Default False.', action='store_true', default=False)
 parser.add_argument('--model', '-m', help='Model to use for chat. Default gpt-4.', default='gpt-4')
 parser.add_argument('--temperature', help='Temperature for chat model. Default 0.', default=0)
 parser.add_argument('--tools', '-t', help=f'Comma separated list of tools to use (from: {", ".join(TOOLS.keys())}) . Default: DDGSearch,Shell', default='DDGSearch,Shell')
 parser.add_argument('--tool-args', help="A dictionary containing kwargs that will be passed to tools as they are initialized. Default: {'Shell': {'confirm_before_exec': True}}", type=dict, default={'Shell': {'confirm_before_exec': True}})
+parser.add_argument('--use-smart-combine', help='Uses smart combination when formatting info for agents. Default False. Use this if your prompts are getting too large.', action='store_true', default=False)
+parser.add_argument('--include-completed-tasks', help='Include completed tasks in the prompt for agents. Default True. Turn this off for less tokens used.', action='store_false', default=True)
 args = parser.parse_args()
 
 # chat model for agent
@@ -59,9 +62,9 @@ agent = initialize_agent(
     memory=memory, # the memory we created
     agent = AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION, # const
     agent_kwargs={
-        'prefix': SEARCHGPT_PREFIX,
-        'format_instructions': SEARCHGPT_FORMAT_INSTRUCTIONS,
-        'suffix': SEARCHGPT_SUFFIX
+        'prefix': AGENT_PREFIX,
+        'format_instructions': AGENT_FORMAT_INSTRUCTIONS,
+        'suffix': AGENT_SUFFIX
     },
     callbacks=[EmptyCallbackHandler()], # so that we can dynamically add with taskman.init_agent
     verbose=True # so we can see when it runs each tool
@@ -85,10 +88,14 @@ def main():
             task = input('New task: ')
         res = agent.run(taskman.format_task_str(
             task,
-            smart_combine=True, # i don't recommend using this lol
-            include_completed_tasks=True # this one, maybe so
+            smart_combine=args.use_smart_combine, # i don't recommend using this lol
+            include_completed_tasks=args.include_completed_tasks # this one, maybe so
         )) # task result
         taskman.refine(task, res) # refine process for taskmanager
 
 if __name__ == '__main__':
-    main() # f it we ball
+    if args.tui:
+        from tui import main as tui_main
+        tui_main(taskman, agent, args)
+    else:
+        main() # f it we ball

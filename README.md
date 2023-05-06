@@ -5,6 +5,12 @@ This repository contains a copy of my [ai task manager](https://replit.com/@Marc
 
 **Please note that due to the young age of libraries used, if you encounter an error, you may need to run `pip install --upgrade -r requirements.txt`.** If your error persists, please submit an issue.
 
+# **New Terminal UI**
+
+![media/tui.png](media/tui.png)
+
+To use the new terminal user interface, run the program with the `--tui` argument!
+
 ### Media of 1337GPT in use
 
 ![media/talking_to_user_and_retrying_nmap_scan.png](media/talking_to_user_and_retrying_nmap_scan.png)
