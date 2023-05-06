@@ -11,14 +11,18 @@ class WriteFileTool(BaseTool):
         'Returns the filename if written successfully, or an error string.'
     )
 
-    def _run(self, arguments):
-        if type(arguments) == dict:
-            args = arguments
+    def _run(self, *args, **kwargs):
+        if args:
+            if type(args[0]) == dict:
+                args = args[0]
+            else:
+                try:
+                    args = json.loads(args[0])
+                except json.JSONDecodeError:
+                    return 'Error: invalid JSON argument. Make sure you are passing a single, string, argument containing VALID JSON with the keys "filename" containing a string, "content" containing a string, and the optional "overwrite" containing a boolean.'
         else:
-            try:
-                args = json.loads(arguments)
-            except json.JSONDecodeError:
-                return 'Error: invalid JSON argument. Make sure you are passing a single, string, argument containing VALID JSON with the keys "filename" containing a string, "content" containing a string, and the optional "overwrite" containing a boolean.'
+            args = kwargs
+
         if not (filename := args.get('filename')):
             return 'Error: no "filename" specified.'
         if not (content := args.get('content')):
