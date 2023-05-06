@@ -58,6 +58,9 @@ class Console(object):
         lines.append(line)
         self.tui.table.columns[1]._cells = lines
     
+    def print(self, *args):
+        self.add_line(' '.join(map(repr, args)))
+    
     def update_last(self, text):
         lines = self.getlines()
         lines[-1] = self.tui.pad(text)
@@ -75,11 +78,9 @@ class Console(object):
                 return inp
             elif ord(ch) == 127:
                 self._input = self._input[:-1]
-                prompt = self.getlines()[-1][:-len(self._input)]
                 self.update_last(prompt + self._input)
             else:
                 self._input += ch
-                prompt = self.getlines()[-1][:-len(self._input)]
                 self.update_last(prompt + self._input)
 
 def update_data_from_taskman(taskman: TaskManager, tui: TUI):
@@ -91,6 +92,19 @@ def update_data_from_taskman(taskman: TaskManager, tui: TUI):
     })).text
     for i, line in enumerate(data.split('\n')):
         tui.table.columns[0]._cells[i] = line
+
+def test():
+    # put this at the end of the file
+    tui = TUI()
+    console = Console(tui)
+
+    with Live(tui.table, refresh_per_second=10): # increased refresh for typing
+        while True:
+            cmd = console.input('>>> ')
+            if cmd in ('exit', 'break', 'exit()'):
+                break
+            res = eval(cmd)
+            console.print(cmd)
 
 def main(taskman: TaskManager, agent, args):
     tui = TUI()
