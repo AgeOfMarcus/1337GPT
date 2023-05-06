@@ -23,11 +23,17 @@ class ShellTool(BaseTool):
             'stderr': stderr.decode()
         }
 
+    def input(self, prompt: str) -> str:
+        if str(type(self.verbose)) == "<class 'method'>": # hack for tui
+            return self.verbose(prompt)
+        else:
+            return input(prompt)
+
     def _run(self, command: str) -> str:
         if self.confirm_before_exec:
-            conf = input(f'[system] run the following command? `{command}`. [y]es/[N]o/[e]dit: ').lower()
+            conf = self.input(f'[system] run the following command? `{command}`. [y]es/[N]o/[e]dit: ').lower()
             if conf.startswith('e'):
-                new = input('enter new command: ')
+                new = self.input('enter new command: ')
                 return self._sh(new)
             elif conf.startswith('y'):
                 return self._sh(command)
