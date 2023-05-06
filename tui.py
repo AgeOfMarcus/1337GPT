@@ -8,7 +8,8 @@ from task_manager import TaskManager
 try:
     if os.name == 'nt':
         # windows
-        from msvcrt import getch
+        from msvcrt import getch as _getch
+        getch = lambda: _getch().decode()
     else:
         # linux based
         from getch import getch
@@ -69,7 +70,7 @@ class Console(object):
     def input(self, prompt):
         self.add_line(prompt)
         while True:
-            ch = getch().decode()
+            ch = getch()
             if ch == '\x03':
                 raise KeyboardInterrupt
             elif ch in ('\n', '\r'):
