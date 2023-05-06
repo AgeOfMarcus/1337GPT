@@ -63,7 +63,9 @@ class TaskManager(object):
     result: {result}
     -----------
     
-    Refine your current set of tasks based on the task result above. If the result included any info you may need to satisfy your final goal, add it to the final result.
+    Refine your current set of tasks based on the task result above. E.g., if information has already been gathered that satisfies the requests in a task, it is not needed anymore. However, if information gathered shows a new task needs to be added, include it.
+    If the result included any info you may need to complete later tasks, add it to your stored_info.
+    If the result included any info you may need to satisfy your final goal, add it to the final result. Format it as necessary, but make sure it includes all information needed.
     You always give your response in valid JSON format so that it can be parsed (in python) with `json.loads`. Return a dictionary with the keys: "current_tasks" a list of strings (your complete set of tasks, if you need to, add any new tasks and reorder as you see fit), "final_result" a dict (your final result to satisfy your final goal, add to this as you go), "stored_info" a dict (info you may need for later tasks), if you have any thoughts to output to the user, include them as a string with the key "thoughts", and lastly, the key "goal_complete" should contain a boolean value True or False indicating if the final goal has been reached. 
     Make sure your list of tasks ends with a final task like "show results and terminate".
     '''

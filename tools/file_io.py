@@ -51,3 +51,20 @@ class ReadFileTool(BaseTool):
         return file.read()
     async def _arun(self, filename):
         return self._run(filename)
+
+class ListDirTool(BaseTool):
+    name = 'ListDirTool'
+    description = (
+        'Useful for listing directory contents.'
+        'Accepts a directory path string as argument (allows "." and such).'
+        'Returns a list of filenames, or an error message.'
+    )
+
+    def _run(self, path: str) -> list:
+        try:
+            return os.listdir(path)
+        except:
+            return f'Error: cannot list directory: {path}'
+    
+    async def _arun(self, path):
+        return self._run(path)

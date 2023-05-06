@@ -17,14 +17,14 @@ This repository contains a copy of my [ai task manager](https://replit.com/@Marc
 * persist sessions with `json` files
     * this allows you to edit previous tasks' outputs and more
 * built-in tools (using [langchain](https://python.langchain.com)):
-    * Read/Write local files
+    * Read/Write/List local files
     * Scrape text from websites (using `extractor API` - **requires API key**)
     * Search Google (using `googlesearch.py` - **no API key needed**)
     * Execute shell commands (by default, requires confirmation)
     * Search the shodan.io API (**requires API key**)
     * Ask the User a question
 
-You can now select which tools your agent can use with the `--tools` argument. By default, `GoogleSearch,Shell,Shodan` is set (yes, they have readable names now).
+You can now select which tools your agent can use with the `--tools` argument. By default, `DDGSearch,Shell` is set (yes, they have readable names now).
 
 # Usage
 
@@ -38,9 +38,21 @@ You can now select which tools your agent can use with the `--tools` argument. B
     * `cp .env.example .env`
     * edit the file and add your keys
 5. Run the `main.py` file (use `--help` to see full list of arguments)
-    * example: `python main.py --goal "preform a pentest of localhost. start with an nmap scan" --tools "Shell,ReadFile" --persist localhost.json`
+    * example: `python main.py --goal "preform a pentest of localhost. start with an nmap scan" --tools "Shell,Files" --persist localhost.json`
 
 By default, `1337GPT` uses **GPT-4** for best results. However if you don't have access to the API, you can use `--model gpt-3.5-turbo` instead.
+
+## Using tools
+
+Some tools that I have written to assist `1337GPT` can be found in the `tools/` directory. For more info, refer to [tools/README.md](tools/README.md).
+
+#### Tool groups
+
+Some tools that work closely have been grouped together to make it easier to use. You can still use each tool seperately, but if you want, you can refer to the group by one name to make it easier.
+
+**Groups:**
+
+* `Files` - contains `ReadFile`, `WriteFile`, and `ListDir`
 
 ## Best practices
 

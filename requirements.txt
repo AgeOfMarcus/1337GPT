@@ -1,5 +1,6 @@
 langchain
 openai
-googlesearch.py
 python-dotenv
 requests
+googlesearch.py
+duckduckgo-search
