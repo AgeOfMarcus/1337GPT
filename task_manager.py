@@ -1,8 +1,12 @@
+from langchain.callbacks.base import BaseCallbackHandler
 from langchain.llms.base import BaseLLM
 from langchain.tools import BaseTool
 from code import InteractiveConsole
 import json
 import os
+
+class EmptyCallbackHandler(BaseCallbackHandler):
+    pass
 
 def save_to_file(goal: str, result: dict):
     """Saves the results dict (second argument) to a file ending in '.result.txt' with the name set to the goal (first argument)"""
@@ -154,8 +158,8 @@ class TaskManager(object):
             self._create_initial_tasks()
 
     def init_agent(self, agent):
-        agent.callback_manager.on_tool_start = self._on_tool_start
-        agent.callback_manager.on_tool_end = self._on_tool_end
+        agent.callbacks[0].on_tool_start = self._on_tool_start
+        agent.callbacks[0].on_tool_end = self._on_tool_end
 
     def format_task_str(self, task: str, smart_combine: bool = False, include_completed_tasks: bool = False):
         """

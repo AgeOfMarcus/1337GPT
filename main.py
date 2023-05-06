@@ -5,7 +5,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
 # task_manager.py
-from task_manager import TaskManager, convert_langchain_tools
+from task_manager import TaskManager, convert_langchain_tools, EmptyCallbackHandler
 # prompt.py - recycled
 from prompt import SEARCHGPT_PREFIX, SEARCHGPT_FORMAT_INSTRUCTIONS, SEARCHGPT_SUFFIX
 # tools/
@@ -63,6 +63,7 @@ agent = initialize_agent(
         'format_instructions': SEARCHGPT_FORMAT_INSTRUCTIONS,
         'suffix': SEARCHGPT_SUFFIX
     },
+    callbacks=[EmptyCallbackHandler()], # so that we can dynamically add with taskman.init_agent
     verbose=True # so we can see when it runs each tool
 )
 # this lets us save tool outputs
