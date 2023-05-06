@@ -109,7 +109,7 @@ def test():
 def main(taskman: TaskManager, agent, args):
     tui = TUI()
     update_data_from_taskman(taskman, tui)
-    taskman.output_func = lambda *args: tui.console.add_line(' '.join(map(repr, args)))
+    taskman.output_func = tui.console.print
     taskman.input_func = tui.console.input
     taskman.init_agent(
         agent,
@@ -119,7 +119,8 @@ def main(taskman: TaskManager, agent, args):
     taskman.verbose = False
     agent.verbose = False
 
-    with Live(tui.table, refresh_per_second=10):  
+    with Live(tui.table, refresh_per_second=10):
+        __import__('time').sleep(0.5) # for some reason the first line doesn't show up
         while not taskman.goal_completed:
             if not taskman.current_tasks:
                 if taskman.ensure_goal_complete():
