@@ -119,10 +119,10 @@ def main(taskman: TaskManager, agent, args):
 
     class TUIHandler(BaseCallbackHandler):
         def on_tool_start(self, tool, args, **kwargs):
-            tui.console.add_line(f'Starting tool {tool} with args {args}')
+            tui.console.add_line(f'Starting tool [green]{tool["name"]}[/green] with args [green]{args}[/green]')
         
         def on_tool_end(self, out, **kwargs):
-            tui.console.add_line(f'Tool finished with output {out}')
+            tui.console.add_line(f'Tool finished with output [darkgreen]{out}[/darkgreen]')
     
     cb_handler = TUIHandler()
     
@@ -145,12 +145,12 @@ def main(taskman: TaskManager, agent, args):
                 continue
             
             task = taskman.current_tasks.pop(0)
-            tui.console.add_line(f'Next task: {task}')
-            cont = tui.console.input('Continue? [Y]es/\[n]o/\[e]dit: ')[0].lower()
+            tui.console.add_line(f'[grey]Next task: {task}[/grey]')
+            cont = tui.console.input('[blue]Continue?[/blue] \[Y]es/\[n]o/\[e]dit: ')[0].lower()
             if cont == 'n':
                 continue
             elif cont == 'e':
-                task = tui.console.input('Enter task: ')
+                task = tui.console.input('[cyan]Enter task[/cyan]: ')
             
             res = agent.run(taskman.format_task_str(
                 task,

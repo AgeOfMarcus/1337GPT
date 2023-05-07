@@ -25,7 +25,7 @@ class ShellTool(BaseTool):
 
     def input(self, prompt: str) -> str:
         if str(type(self.verbose)) == "<class 'method'>": # hack for tui
-            return self.verbose(prompt)
+            return self.verbose(f'[red]{prompt}[/red]')
         else:
             return input(prompt)
 
