@@ -118,12 +118,10 @@ def main(taskman: TaskManager, agent, args):
     taskman.input_func = tui.console.input
 
     class TUIHandler(BaseCallbackHandler):
-
-
-        def on_tool_start(self, tool, args):
+        def on_tool_start(self, tool, args, **kwargs):
             tui.console.add_line(f'Starting tool {tool} with args {args}')
         
-        def on_tool_end(self, out):
+        def on_tool_end(self, out, **kwargs):
             tui.console.add_line(f'Tool finished with output {out}')
     
     cb_handler = TUIHandler()
