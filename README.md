@@ -11,6 +11,8 @@ This repository contains a copy of my [ai task manager](https://replit.com/@Marc
 
 To use the new terminal user interface, run the program with the `--tui` argument!
 
+[*Click here to read my blog post about how I created this abomination of code*](https://marcus.hashnode.dev/creating-a-basic-split-panel-console-interface-in-python-with-io)
+
 ### Media of 1337GPT in use
 
 ![media/talking_to_user_and_retrying_nmap_scan.png](media/talking_to_user_and_retrying_nmap_scan.png)
