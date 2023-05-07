@@ -7,9 +7,11 @@ This repository contains a copy of my [ai task manager](https://replit.com/@Marc
 
 # **New Terminal UI**
 
-![media/tui_demo.gif](media/tui_demo.gif)
+[![media/tui_demo.gif](media/tui.png)](media/tui_demo.gif)
 
 To use the new terminal user interface, run the program with the `--tui` argument!
+
+[*Click here to read my blog post about how I created this abomination of code*](https://marcus.hashnode.dev/creating-a-basic-split-panel-console-interface-in-python-with-io)
 
 ### Media of 1337GPT in use
 
@@ -47,7 +49,7 @@ You can now select which tools your agent can use with the `--tools` argument. B
     * `cp .env.example .env`
     * edit the file and add your keys
 5. Run the `main.py` file (use `--help` to see full list of arguments)
-    * example: `python main.py --goal "preform a pentest of localhost. start with an nmap scan" --tools "Shell,Files" --persist localhost.json`
+    * example: `python main.py --tui --goal "preform a pentest of localhost. start with an nmap scan" --tools "Shell,Files" --persist localhost.json`
 
 By default, `1337GPT` uses **GPT-4** for best results. However if you don't have access to the API, you can use `--model gpt-3.5-turbo` instead.
 
