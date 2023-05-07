@@ -118,13 +118,15 @@ def main(taskman: TaskManager, agent, args):
     taskman.input_func = tui.console.input
 
     class TUIHandler(BaseCallbackHandler):
+
+
         def on_tool_start(self, tool, args):
             tui.console.add_line(f'Starting tool {tool} with args {args}')
         
         def on_tool_end(self, out):
             tui.console.add_line(f'Tool finished with output {out}')
     
-    agent.callbacks[0] = TUIHandler()
+    cb_handler = TUIHandler()
     
     taskman.verbose = False # not needed as left pane shows info
     agent.verbose = False # cant redirect these outputs
@@ -156,5 +158,5 @@ def main(taskman: TaskManager, agent, args):
                 task,
                 smart_combine=args.use_smart_combine,
                 include_completed_tasks=args.include_completed_tasks
-            ))
+            ), callbacks=[cb_handler])
             taskman.refine(task, res)

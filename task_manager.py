@@ -326,8 +326,7 @@ class TaskManager(object):
             for task in current_tasks:
                 if not task in self.completed_tasks.keys():
                     new_current_tasks.append(task)
-            if self.verbose:
-                self.output_func(f'[system] new tasks: {new_current_tasks} (skipped: {", ".join(t for t in new_current_tasks if not t in current_tasks)})')
+            self.output_func(f'[system] new tasks: {new_current_tasks} (skipped: {", ".join(t for t in new_current_tasks if not t in current_tasks)})')
             self.current_tasks = new_current_tasks
 
     def ensure_goal_complete(self):
