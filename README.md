@@ -49,7 +49,7 @@ You can now select which tools your agent can use with the `--tools` argument. B
     * `cp .env.example .env`
     * edit the file and add your keys
 5. Run the `main.py` file (use `--help` to see full list of arguments)
-    * example: `python main.py --goal "preform a pentest of localhost. start with an nmap scan" --tools "Shell,Files" --persist localhost.json`
+    * example: `python main.py --tui --goal "preform a pentest of localhost. start with an nmap scan" --tools "Shell,Files" --persist localhost.json`
 
 By default, `1337GPT` uses **GPT-4** for best results. However if you don't have access to the API, you can use `--model gpt-3.5-turbo` instead.
 
