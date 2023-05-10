@@ -5,6 +5,16 @@ This repository contains a copy of my [ai task manager](https://replit.com/@Marc
 
 **Please note that due to the young age of libraries used, if you encounter an error, you may need to run `pip install --upgrade -r requirements.txt`.** If your error persists, please submit an issue.
 
+# GPT4All models
+
+Create a folder called `models` to store your `.bin` files in.
+
+Download models from the [GPT4All website](https://gpt4all.io/index.html) and place them in that folder. 
+
+## Usage
+
+When running `1337GPT`, specify the path to your model with `-m/--model`. For example: `--model models/ggml-gpt4all-j-v1.3-groovy.bin`.
+
 # **New Terminal UI**
 
 [![media/tui_demo.gif](media/tui.png)](media/tui_demo.gif)
