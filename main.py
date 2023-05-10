@@ -3,7 +3,7 @@ from dotenv import load_dotenv; load_dotenv()
 from langchain.agents import initialize_agent, AgentType
 from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
-from langchain.llms import OpenAI
+from langchain.llms import GPT4All
 # task_manager.py
 from task_manager import TaskManager, convert_langchain_tools, EmptyCallbackHandler
 # prompt.py - recycled
@@ -27,9 +27,11 @@ parser.add_argument('--include-completed-tasks', help='Include completed tasks i
 args = parser.parse_args()
 
 # chat model for agent
-llm = ChatOpenAI(
-    temperature=args.temperature, 
-    model_name=args.model
+llm = GPT4All(
+    model=args.model,
+    temp=args.temperature,
+    backend='gptj',
+    verbose=(not args.tui) # if tui, don't print
 )
 # memory for agent
 memory = ConversationBufferMemory(
@@ -50,7 +52,12 @@ for tool in args.tools.split(','):
 taskman = TaskManager(
     args.goal, # goal
     convert_langchain_tools(tools), # list of dicts of tools
-    OpenAI(temperature=0), # llm for taskmanager
+    GPT4All(
+        model=args.model,
+        temp=0,
+        backend='gptj',
+        verbose=(not args.tui) # if tui, don't print
+    ), # llm for taskmanager
     persist=args.persist, # i want to persist data
     allow_repeat_tasks=args.repeat, # so it doesn't get stuck in a loop
 )

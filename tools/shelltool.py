@@ -31,7 +31,7 @@ class ShellTool(BaseTool):
 
     def _run(self, command: str) -> str:
         if self.confirm_before_exec:
-            conf = self.input(f'[system] run the following command? `{command}`. [y]es/[N]o/[e]dit: ').lower()
+            conf = self.input(f'\[system] run the following command? `{command}`. \[y]es/\[N]o/\[e]dit: ').lower()
             if conf.startswith('e'):
                 new = self.input('enter new command: ')
                 return self._sh(new)
