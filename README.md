@@ -1,4 +1,4 @@
-# 1337GPT
+# [1337GPT](https://marcus.hashnode.dev/1337gpt-yet-another-gpt-agent-for-penetration-testing)
 My attempt at making a GPT agent for pentesting
 
 This repository contains a copy of my [ai task manager](https://replit.com/@MarcusWeinberger/ai-task-manager) that has been modified to preform penetration tests. You can read a slightly rephrased version of this README [**on my hashnode blog**](https://Marcus.hashnode.dev/1337gpt-yet-another-gpt-agent-for-penetration-testing)!
